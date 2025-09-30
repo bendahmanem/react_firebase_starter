@@ -1,14 +1,19 @@
-import AuthContextProvider from "./contexts/auth/authProvider.jsx";
-import AuthForm from "./components/Auth/AuthForm";
-import "./App.css";
-import TestComponent from "./components/TestComponent.jsx";
+
+import { Outlet } from 'react-router';
+import AuthContextProvider from './contexts/auth/authProvider.jsx';
+import './App.css';
 
 function App() {
   return (
     <AuthContextProvider>
       <div>
-        <h1>Firebase Email Authentication</h1>
-        <AuthForm />
+        <h1>Firebase React Router Email auth :) </h1>
+        <nav>
+          {/* Navigation will be handled by individual components */}
+        </nav>
+        <main>
+          <Outlet />
+        </main>
       </div>
     </AuthContextProvider>
   );

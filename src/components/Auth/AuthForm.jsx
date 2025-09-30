@@ -1,4 +1,6 @@
+
 import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router';
 import AuthContext from '../../contexts/auth/authContext';
 
 export default function AuthForm() {
@@ -6,11 +8,12 @@ export default function AuthForm() {
     const [password, setPassword] = useState('');
     const [isLogin, setIsLogin] = useState(true);
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
     const { user, login, register, logout, loading } = useContext(AuthContext);
 
     const handleSubmit = async (e) => {
-      e.preventDefault();
+        e.preventDefault();
         setError('');
 
         try {
@@ -19,14 +22,8 @@ export default function AuthForm() {
             } else {
                 await register(email, password);
             }
-        } catch (err) {
-            setError(err.message);
-        }
-    };
-
-    const handleLogout = async () => {
-        try {
-            await logout();
+            // Navigation will be handled by React Router automatically
+            navigate('/dashboard');
         } catch (err) {
             setError(err.message);
         }
@@ -36,15 +33,11 @@ export default function AuthForm() {
         return <div>Loading...</div>;
     }
 
+    // If user is authenticated, they shouldn't see this form
+    // This is handled by the loader/middleware, but as a fallback:
     if (user) {
-        return (
-            <div style={{ padding: '20px', maxWidth: '400px', margin: '0 auto' }}>
-                <h2>Welcome!</h2>
-                <p>Email: {user.email}</p>
-                <p>User ID: {user.uid}</p>
-                <button onClick={handleLogout}>Logout</button>
-            </div>
-        );
+        navigate('/dashboard');
+        return null;
     }
 
     return (
